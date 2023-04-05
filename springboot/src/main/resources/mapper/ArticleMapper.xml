@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.ArticlesMapper">
+    <update id="update">
+        update articles_manage
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="pub_author != null">
+                pub_author = #{pub_author},
+            </if>
+            <if test="pub_content != null">
+                pub_content = #{pub_content},
+            </if>
+            <if test="pub_type != null">
+                pub_type = #{pub_type},
+            </if>
+        </set>
+
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Articles">
+        select * from articles_manage
+        <where>
+            <if test="pub_type != null">
+                pub_type like concat('%',#{pub_type},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from articles_manage
+        <where>
+            <if test="pub_type != null">
+                pub_type like concat('%',#{pub_type},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from articles_manage where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTypes" resultType="com.campus.demo.entity.Articles">
+        select * from articles_manage
+        <where>
+            <if test="pub_type != null">
+                pub_type like concat('%',#{pub_type},'%')
+            </if>
+            order by pub_time DESC
+        </where>
+        limit 0,5
+    </select>
+</mapper>

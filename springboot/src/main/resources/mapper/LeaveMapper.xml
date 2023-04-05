@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.LeaveMapper">
+        <update id="update">
+            update leave_application
+            <set>
+                <if test="username != null">
+                    username = #{username},
+                </if>
+                <if test="name != null">
+                    name = #{name},
+                </if>
+                <if test="leave_type != null">
+                    leave_type = #{leave_type},
+                </if>
+                <if test="start != null">
+                    start = #{start},
+                </if>
+                <if test="end != null">
+                    end = #{end},
+                </if>
+                <if test="reason != null">
+                    reason = #{reason},
+                </if>
+                <if test="leave_yn != null">
+                    leave_yn = #{leave_yn},
+                </if>
+                <if test="emergency_tel != null">
+                    emergency_tel = #{emergency_tel},
+                </if>
+                <if test="remarks != null">
+                    remarks = #{remarks},
+                </if>
+                <if test="status != null">
+                    status = #{status}
+                </if>
+            </set>
+            <where>
+                id = #{id}
+            </where>
+        </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Leave">
+        select * from leave_application
+        <where>
+            <if test="name != null">
+                 name like concat('%',#{name},'%')
+            </if>
+            <if test="leave_type != null">
+                and leave_type like concat('%',#{leave_type},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from leave_application
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="leave_type != null">
+                and leave_type like concat('%',#{leave_type},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectLeavePage" resultType="com.campus.demo.entity.Leave">
+        select * from leave_application
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectLeaveTotal" resultType="integer">
+        select count(*) from leave_application
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from leave_application where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

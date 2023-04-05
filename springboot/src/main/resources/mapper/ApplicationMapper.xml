@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.ApplicationMapper">
+    <update id="updateApplication">
+        update materials_application
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="goods_name != null">
+                goods_name = #{goods_name},
+            </if>
+            <if test="application != null">
+                application = #{application},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Application">
+        select * from materials_application
+        <where>
+            <if test="goods_name != null">
+                goods_name like concat('%',#{goods_name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from materials_application
+        <where>
+            <if test="goods_name != null">
+                goods_name like concat('%',#{goods_name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectApplicationPage" resultType="com.campus.demo.entity.Application">
+        select * from materials_application
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectApplicationTotal" resultType="integer">
+        select count(*) from materials_application
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from materials_application where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

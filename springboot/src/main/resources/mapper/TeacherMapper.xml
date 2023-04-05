@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.TeacherMapper">
+    <update id="update">
+        update teacher
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="address != null">
+                address = #{address}
+            </if>
+        </set>
+
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <update id="updateTea">
+        update teacher
+        <set>
+            <!--           <if test="username != null">-->
+            <!--               username = #{username},-->
+            <!--           </if>-->
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="address != null">
+                address = #{address}
+            </if>
+        </set>
+
+        <where>
+            username = #{username}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Teacher">
+        select * from teacher
+        <where>
+            status = 0
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="address != null">
+                and address like concat('%',#{address},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from teacher
+        <where>
+            status = 0
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="address != null">
+                and address like concat('%',#{address},'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="deteleBatchById">
+        update teacher set status = 1 where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
+

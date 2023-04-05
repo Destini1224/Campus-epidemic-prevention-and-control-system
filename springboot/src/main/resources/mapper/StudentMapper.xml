@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.StudentMapper">
+    <update id="update">
+       update student
+       <set>
+           <if test="username != null">
+               username = #{username},
+           </if>
+           <if test="password != null">
+               password = #{password},
+           </if>
+           <if test="name != null">
+               name = #{name},
+           </if>
+           <if test="stuClass != null">
+               stuClass = #{stuClass},
+           </if>
+           <if test="dormitory != null">
+               dormitory = #{dormitory},
+           </if>
+           <if test="tel != null">
+               tel = #{tel},
+           </if>
+           <if test="email != null">
+               email = #{email},
+           </if>
+           <if test="address != null">
+               address = #{address}
+           </if>
+       </set>
+
+       <where>
+           id = #{id}
+       </where>
+    </update>
+
+    <update id="updateStu">
+        update student
+        <set>
+            <!--           <if test="username != null">-->
+            <!--               username = #{username},-->
+            <!--           </if>-->
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="stuClass != null">
+                stuClass = #{stuClass},
+            </if>
+            <if test="dormitory != null">
+                dormitory = #{dormitory},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="address != null">
+                address = #{address}
+            </if>
+        </set>
+
+        <where>
+            username = #{username}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Student">
+        select * from student
+        <where>
+            status = 0
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="stuClass != null">
+                and stuClass like concat('%',#{stuClass},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from student
+        <where>
+            status = 0
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="stuClass != null">
+                and stuClass like concat('%',#{stuClass},'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="deteleBatchById">
+        update student set status = 1 where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+             #{id}
+        </foreach>
+    </update>
+</mapper>

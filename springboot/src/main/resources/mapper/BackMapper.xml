@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.BackMapper">
+    <update id="update">
+        update back
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="plan_go != null">
+                plan_go = #{plan_go},
+            </if>
+            <if test="plan_reach != null">
+                plan_reach = #{plan_reach},
+            </if>
+            <if test="becity != null">
+                becity = #{becity},
+            </if>
+            <if test="emergency_tel != null">
+                emergency_tel = #{emergency_tel},
+            </if>
+            <if test="evidences != null">
+                evidences = #{evidences},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Back">
+        select * from back
+        <where>
+            <if test="name != null">
+               name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from back
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBackPage" resultType="com.campus.demo.entity.Back">
+        select * from back
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectBackTotal" resultType="integer">
+        select count(*) from back
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from back where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

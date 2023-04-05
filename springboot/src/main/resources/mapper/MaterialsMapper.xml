@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.MaterialsMapper">
+    <update id="update">
+        update materials
+        <set>
+            <if test="goods_name != null">
+                goods_name = #{goods_name},
+            </if>
+            <if test="storage != null">
+                storage = #{storage},
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Materials">
+        select * from materials
+        <where>
+            <if test="goods_name != null">
+                goods_name like concat('%',#{goods_name},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from materials
+        <where>
+            <if test="goods_name != null">
+                 goods_name like concat('%',#{goods_name},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from materials where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

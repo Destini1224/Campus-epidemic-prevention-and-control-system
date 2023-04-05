@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.AdminMapper">
+    <update id="update">
+        update admin
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password}
+            </if>
+        </set>
+
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <update id="updateAdmin">
+        update admin
+        <set>
+            <if test="password != null">
+                password = #{password},
+            </if>
+        </set>
+
+        <where>
+            username = #{username}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Admin">
+        select * from admin
+        <where>
+            status = 0
+            <if test="username != null">
+                and username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from admin
+        <where>
+            status = 0
+            <if test="username != null">
+                and username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="deteleBatchById">
+        update admin set status = 1 where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>
+
+

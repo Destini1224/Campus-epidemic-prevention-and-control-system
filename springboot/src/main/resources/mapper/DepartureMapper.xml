@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.DepartureMapper">
+        <update id="update">
+            update departure
+            <set>
+                <if test="username != null">
+                    username = #{username},
+                </if>
+                <if test="name != null">
+                    name = #{name},
+                </if>
+                <if test="plan_leave != null">
+                    plan_leave = #{plan_leave},
+                </if>
+                <if test="plan_reach != null">
+                    plan_reach = #{plan_reach},
+                </if>
+                <if test="destination != null">
+                    destination = #{destination},
+                </if>
+                <if test="emergency_tel != null">
+                    emergency_tel = #{emergency_tel},
+                </if>
+                <if test="plan_back != null">
+                    plan_back = #{plan_back},
+                </if>
+                <if test="evidences != null">
+                    evidences = #{evidences},
+                </if>
+                <if test="remarks != null">
+                    remarks = #{remarks},
+                </if>
+                <if test="status != null">
+                    status = #{status}
+                </if>
+            </set>
+            <where>
+                id = #{id}
+            </where>
+        </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Departure">
+        select * from departure
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from departure
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="status != null">
+                and status like concat('%',#{status},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectDeparturePage" resultType="com.campus.demo.entity.Departure">
+        select * from departure
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectDepartureTotal" resultType="integer">
+        select count(*) from departure
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from departure where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.demo.mapper.HealthMapper">
+    <update id="update">
+        update health_manage
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="temperature != null">
+                temperature = #{temperature},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="health != null">
+                health = #{health},
+            </if>
+            <if test="contact_infection != null">
+                contact_infection = #{contact_infection},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+        </set>
+
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="selectPage" resultType="com.campus.demo.entity.Health">
+        select * from health_manage
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="health != null">
+                and health like concat('%',#{health},'%')
+            </if>
+            <if test="u_type != null">
+                and u_type  like concat('%',#{u_type},'%')
+            </if>
+            <if test="last_time != null">
+                and last_time  like concat('%',#{last_time},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectTotal" resultType="integer">
+        select count(*) from health_manage
+        <where>
+            <if test="name != null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="health != null">
+                and health like concat('%',#{health},'%')
+            </if>
+            <if test="u_type != null">
+                and u_type  like concat('%',#{u_type},'%')
+            </if>
+            <if test="last_time != null">
+                and last_time  like concat('%',#{last_time},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deteleBatchById">
+        delete from health_manage where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectHealthPage" resultType="com.campus.demo.entity.Health">
+        select * from health_manage
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectHealthTotal" resultType="integer">
+        select count(*) from health_manage
+        <where>
+            <if test="username != null">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
+
